@@ -1,1 +1,1 @@
-heyh there. 
+For email password us the App password.
