@@ -1,1 +1,3 @@
-For email password us the App password.
+npm i express
+npm i nodemon
+npm start
