@@ -10,16 +10,16 @@ const transporter = nodemailer.createTransport({
         pass: process.env.nodemailerPass,
     },
     tls: {
-        ciphers: SSLv3
+        ciphers: 'SSLv3'
     }
   });
 
   try {
     const mailOptions = {
       from: process.env.nodemailerEmail,
-      to: "jason.conkle5@gmail.com",
+      to: "barrycumbie@gmail.com",
       subject: 'Pop Quiz',
-      text: `text`
+      text: `Credit for Email assignment.`
     };
 
     transporter.sendMail(mailOptions, function (error, info) {
