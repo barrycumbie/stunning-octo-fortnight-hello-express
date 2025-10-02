@@ -1,5 +1,4 @@
-# CIS 486 MINI APP
-# Music Library
+# CIS 486 MINI APP 🎶🎵
 
 ## - Bailee Strait on [GitHub](https://github.com/baileestrait)
 ## - [Demo Music Library Mini App](https://music-library-io5y.onrender.com/)
