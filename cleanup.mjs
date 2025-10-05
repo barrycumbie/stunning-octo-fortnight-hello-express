@@ -18,23 +18,23 @@ async function cleanupDatabase() {
     await client.connect();
     console.log("Connected to MongoDB Atlas!");
 
-    const db = client.db("school");
-    const collection = db.collection("students");
+    const db = client.db("steam_apps");
+    const collection = db.collection("time");
 
     // Check how many students exist before deletion
     const existingCount = await collection.countDocuments();
-    console.log(`Found ${existingCount} students in the database`);
+    console.log(`Found ${existingCount} games in the database`);
 
     if (existingCount === 0) {
-      console.log("🤷 No students found. Database is already clean!");
+      console.log("No Games. Database is already clean!");
     } else {
       // Delete all students
       const result = await collection.deleteMany({});
-      console.log(`🗑️  Successfully deleted ${result.deletedCount} students!`);
+      console.log(`Successfully deleted ${result.deletedCount} games!`);
       
       // Verify deletion
       const remainingCount = await collection.countDocuments();
-      console.log(`📊 Students remaining: ${remainingCount}`);
+      console.log(`Games remaining: ${remainingCount}`);
       
       if (remainingCount === 0) {
         console.log("✅ Database cleanup completed successfully!");
@@ -43,11 +43,11 @@ async function cleanupDatabase() {
     }
 
   } catch (error) {
-    console.error("❌ Error cleaning up database:", error);
+    console.error("Error cleaning up database:", error);
   } finally {
     // Close the connection
     await client.close();
-    console.log("\n🔌 Database connection closed");
+    console.log("Database connection closed");
   }
 }
 

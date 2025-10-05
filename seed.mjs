@@ -12,17 +12,16 @@ const client = new MongoClient(uri, {
   }
 });
 
-// Sample student data
-const sampleStudents = [
-  { name: "Alice Johnson", age: 20, grade: "A" },
-  { name: "Bob Smith", age: 19, grade: "B+" },
-  { name: "Charlie Brown", age: 21, grade: "A-" },
-  { name: "Diana Prince", age: 18, grade: "A+" },
-  { name: "Ethan Hunt", age: 22, grade: "B" },
-  { name: "Fiona Gallagher", age: 19, grade: "B-" },
-  { name: "George Washington", age: 20, grade: "A" },
-  { name: "Hannah Montana", age: 18, grade: "C+" }
-];
+// Sample data
+  const sampleGames = [
+    { name: "Balatro", hours: 11.3, price: 15.99, createdBy: req.user.username, createdAt: new Date() },
+    { name: "Baldur's Gate 3", hours: 490.9, price: 59.99, createdBy: req.user.username, createdAt: new Date() },
+    { name: "Dishonored 2", hours: 176.4, price: 9.99, createdBy: req.user.username, createdAt: new Date() },
+    { name: "Elden Ring", hours: 287.1, price: 59.99, createdBy: req.user.username, createdAt: new Date() },
+    { name: "Skryim", hours: 863.6, price: 9.99, createdBy: req.user.username, createdAt: new Date() },
+    { name: "Slay the Spire", hours: 101, price: 24.99, createdBy: req.user.username, createdAt: new Date() },
+    { name: "Starwars: KOTOR 2", hours: 226.1, price: 9.99, createdBy: req.user.username, createdAt: new Date() }
+  ];
 
 async function seedDatabase() {
   try {
@@ -30,35 +29,35 @@ async function seedDatabase() {
     await client.connect();
     console.log("Connected to MongoDB Atlas!");
 
-    const db = client.db("school");
-    const collection = db.collection("students");
+    const db = client.db("steam_apps");
+    const collection = db.collection("time");
 
     // Check if students already exist
     const existingCount = await collection.countDocuments();
-    console.log(`Found ${existingCount} existing students`);
+    console.log(`Found ${existingCount} existing games`);
 
     if (existingCount > 0) {
-      console.log("🗑️  Clearing existing students before seeding...");
+      console.log("Clearing existing entries before seeding...");
       await collection.deleteMany({});
-      console.log("✅ Existing data cleared");
+      console.log("Existing data cleared");
     }
 
     // Insert sample students
     const result = await collection.insertMany(sampleStudents);
-    console.log(`✅ Successfully seeded ${result.insertedCount} students!`);
+    console.log(`Successfully seeded ${result.insertedCount} games!`);
     
     // Display inserted students
-    console.log("\n📚 Sample students added:");
-    sampleStudents.forEach((student, index) => {
-      console.log(`${index + 1}. ${student.name} (Age: ${student.age}, Grade: ${student.grade})`);
+    console.log("Sample games added:");
+    sampleGames.forEach((game, index) => {
+      console.log(`${index + 1}. ${time.game} (Hours: ${time.hours}, Price: ${time.price})`);
     });
 
   } catch (error) {
-    console.error("❌ Error seeding database:", error);
+    console.error("Error seeding database:", error);
   } finally {
     // Close the connection
     await client.close();
-    console.log("\n🔌 Database connection closed");
+    console.log("Database connection closed");
   }
 }
 

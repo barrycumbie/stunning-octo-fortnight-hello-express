@@ -4,6 +4,9 @@ import { dirname, join } from 'path';
 import { MongoClient, ServerApiVersion, ObjectId } from 'mongodb';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
+import 'dotenv/config';
+
+
 
 const app = express()
 const PORT = process.env.PORT || 3000;
@@ -30,7 +33,7 @@ let db;
 async function connectDB() {
   try {
     await client.connect();
-    db = client.db("school"); // Database name
+    db = client.db("steam_apps"); // Database name
     console.log("Connected to MongoDB!");
   } catch (error) {
     console.error("Failed to connect to MongoDB:", error);
@@ -222,56 +225,54 @@ app.get('/api/auth/me', authenticateToken, async (req, res) => {
   }
 });
 
-// CRUD ENDPOINTS FOR TEACHING
-// Collection: students (documents with name, age, grade fields)
 
-// CREATE - Add a new student (PROTECTED)
-app.post('/api/students', authenticateToken, async (req, res) => {
+// CREATE - Add a new game (PROTECTED)
+app.post('/api/time', authenticateToken, async (req, res) => {
   try {
-    const { name, age, grade } = req.body;
+    const { game, time, price } = req.body;
 
     // Simple validation
-    if (!name || !age || !grade) {
-      return res.status(400).json({ error: 'Name, age, and grade are required' });
+    if (!game || !time || !price) {
+      return res.status(400).json({ error: 'Game, time, and price are required' });
     }
 
-    const student = {
-      name,
-      age: parseInt(age),
-      grade,
+    const app = {
+      game,
+      time: parseInt(age),
+      price,
       createdBy: req.user.username, // Track who created this student
       createdAt: new Date()
     };
-    const result = await db.collection('students').insertOne(student);
+    const result = await db.collection('').insertOne(time);
 
-    console.log(`✅ Student created by ${req.user.username}: ${name}`);
+    console.log(`✅ Student created by ${req.user.username}: ${game}`);
 
     res.status(201).json({
-      message: 'Student created successfully',
-      studentId: result.insertedId,
-      student: { ...student, _id: result.insertedId }
+      message: 'Game created successfully',
+      gameId: result.insertedId,
+      app: { ...app, _id: result.insertedId }
     });
   } catch (error) {
-    res.status(500).json({ error: 'Failed to create student: ' + error.message });
+    res.status(500).json({ error: 'Failed to create app: ' + error.message });
   }
 });
 
-// READ - Get all students (PROTECTED)
-app.get('/api/students', authenticateToken, async (req, res) => {
+// READ - Get all apps (PROTECTED)
+app.get('/api/time', authenticateToken, async (req, res) => {
   try {
-    const students = await db.collection('students').find({}).toArray();
-    console.log(`📋 ${req.user.username} viewed ${students.length} students`);
-    res.json(students); // Return just the array for frontend simplicity
+    const apps = await db.collection('time').find({}).toArray();
+    console.log(`📋 ${req.user.username} viewed ${apps.length} apps`);
+    res.json(apps); // Return just the array for frontend simplicity
   } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch students: ' + error.message });
+    res.status(500).json({ error: 'Failed to fetch apps: ' + error.message });
   }
 });
 
 // UPDATE - Update a student by ID (PROTECTED)
-app.put('/api/students/:id', authenticateToken, async (req, res) => {
+app.put('/api/apps/:id', authenticateToken, async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, age, grade } = req.body;
+    const { game, time, price } = req.body;
 
     // Validate ObjectId
     if (!ObjectId.isValid(id)) {
@@ -279,23 +280,23 @@ app.put('/api/students/:id', authenticateToken, async (req, res) => {
     }
 
     const updateData = { updatedBy: req.user.username, updatedAt: new Date() };
-    if (name) updateData.name = name;
-    if (age) updateData.age = parseInt(age);
-    if (grade) updateData.grade = grade;
+    if (game) updateData.game = game;
+    if (time) updateData.time = parseInt(time);
+    if (grade) updateData.grade = parseInt(grade);
 
-    const result = await db.collection('students').updateOne(
+    const result = await db.collection('time').updateOne(
       { _id: new ObjectId(id) },
       { $set: updateData }
     );
 
     if (result.matchedCount === 0) {
-      return res.status(404).json({ error: 'Student not found' });
+      return res.status(404).json({ error: 'Game not found' });
     }
 
-    console.log(`✏️ Student updated by ${req.user.username}: ${id}`);
+    console.log(`✏️ Game updated by ${req.user.username}: ${id}`);
 
     res.json({
-      message: 'Student updated successfully',
+      message: 'Game updated successfully',
       modifiedCount: result.modifiedCount
     });
   } catch (error) {
@@ -304,29 +305,29 @@ app.put('/api/students/:id', authenticateToken, async (req, res) => {
 });
 
 // DELETE - Delete a student by ID (PROTECTED)
-app.delete('/api/students/:id', authenticateToken, async (req, res) => {
+app.delete('/api/time/:id', authenticateToken, async (req, res) => {
   try {
     const { id } = req.params;
 
     // Validate ObjectId
     if (!ObjectId.isValid(id)) {
-      return res.status(400).json({ error: 'Invalid student ID' });
+      return res.status(400).json({ error: 'Invalid Object ID' });
     }
 
-    const result = await db.collection('students').deleteOne({ _id: new ObjectId(id) });
+    const result = await db.collection('time').deleteOne({ _id: new ObjectId(id) });
 
     if (result.deletedCount === 0) {
-      return res.status(404).json({ error: 'Student not found' });
+      return res.status(404).json({ error: 'Game not found' });
     }
 
-    console.log(`🗑️ Student deleted by ${req.user.username}: ${id}`);
+    console.log(`🗑️ Game deleted by ${req.user.username}: ${id}`);
 
     res.json({
-      message: 'Student deleted successfully',
+      message: 'Game deleted successfully',
       deletedCount: result.deletedCount
     });
   } catch (error) {
-    res.status(500).json({ error: 'Failed to delete student: ' + error.message });
+    res.status(500).json({ error: 'Failed to delete game: ' + error.message });
   }
 });
 
@@ -334,26 +335,25 @@ app.delete('/api/students/:id', authenticateToken, async (req, res) => {
 app.post('/api/seed', authenticateToken, async (req, res) => {
   try {
     // First, clear existing data
-    await db.collection('students').deleteMany({});
+    await db.collection('time').deleteMany({});
 
     // Sample students for teaching
-    const sampleStudents = [
-      { name: "Alice Johnson", age: 20, grade: "A", createdBy: req.user.username, createdAt: new Date() },
-      { name: "Bob Smith", age: 19, grade: "B+", createdBy: req.user.username, createdAt: new Date() },
-      { name: "Charlie Brown", age: 21, grade: "A-", createdBy: req.user.username, createdAt: new Date() },
-      { name: "Diana Prince", age: 18, grade: "A+", createdBy: req.user.username, createdAt: new Date() },
-      { name: "Edward Norton", age: 22, grade: "B", createdBy: req.user.username, createdAt: new Date() },
-      { name: "Fiona Apple", age: 19, grade: "A", createdBy: req.user.username, createdAt: new Date() },
-      { name: "George Wilson", age: 20, grade: "C+", createdBy: req.user.username, createdAt: new Date() },
-      { name: "Hannah Montana", age: 18, grade: "B-", createdBy: req.user.username, createdAt: new Date() }
+    const sampleGames = [
+      { name: "Balatro", hours: 11.3, price: 15.99, createdBy: req.user.username, createdAt: new Date() },
+      { name: "Baldur's Gate 3", hours: 490.9, price: 59.99, createdBy: req.user.username, createdAt: new Date() },
+      { name: "Dishonored 2", hours: 176.4, price: 9.99, createdBy: req.user.username, createdAt: new Date() },
+      { name: "Elden Ring", hours: 287.1, price: 59.99, createdBy: req.user.username, createdAt: new Date() },
+      { name: "Skryim", hours: 863.6, price: 9.99, createdBy: req.user.username, createdAt: new Date() },
+      { name: "Slay the Spire", hours: 101, price: 24.99, createdBy: req.user.username, createdAt: new Date() },
+      { name: "Starwars: KOTOR 2", hours: 226.1, price: 9.99, createdBy: req.user.username, createdAt: new Date() }
     ];
 
-    const result = await db.collection('students').insertMany(sampleStudents);
+    const result = await db.collection('time').insertMany(sampleGames);
 
-    console.log(`🌱 Database seeded by ${req.user.username}: ${result.insertedCount} students`);
+    console.log(`🌱 Database seeded by ${req.user.username}: ${result.insertedCount} games`);
 
     res.json({
-      message: `Database seeded successfully! Added ${result.insertedCount} sample students.`,
+      message: `Database seeded successfully! Added ${result.insertedCount} sample games.`,
       insertedCount: result.insertedCount
     });
   } catch (error) {
@@ -364,12 +364,12 @@ app.post('/api/seed', authenticateToken, async (req, res) => {
 // CLEANUP - Remove all student data (PROTECTED)
 app.delete('/api/cleanup', authenticateToken, async (req, res) => {
   try {
-    const result = await db.collection('students').deleteMany({});
+    const result = await db.collection('time').deleteMany({});
 
-    console.log(`🧹 Database cleaned by ${req.user.username}: ${result.deletedCount} students removed`);
+    console.log(`🧹 Database cleaned by ${req.user.username}: ${result.deletedCount} games removed`);
 
     res.json({
-      message: `Database cleaned successfully! Removed ${result.deletedCount} students.`,
+      message: `Database cleaned successfully! Removed ${result.deletedCount} games.`,
       deletedCount: result.deletedCount
     });
   } catch (error) {
