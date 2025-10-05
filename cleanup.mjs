@@ -37,8 +37,8 @@ async function cleanupDatabase() {
       console.log(`Games remaining: ${remainingCount}`);
       
       if (remainingCount === 0) {
-        console.log("✅ Database cleanup completed successfully!");
-        console.log("💡 Tip: Run 'npm run seed' to add sample students back");
+        console.log("Database cleanup completed successfully!");
+        console.log("Tip: Run 'npm run seed' to add sample students back");
       }
     }
 

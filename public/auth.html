@@ -27,12 +27,12 @@
 <body>
     <div class="container">
         <div class="auth-container">
-            <h1 class="text-center mb-4">🔐 JWT Authentication Demo</h1>
+            <h1 class="text-center mb-4">JWT Authentication</h1>
             
             <!-- Navigation -->
             <div class="text-center mb-4">
-                <a href="/" class="btn btn-secondary me-2">🏠 Home</a>
-                <a href="student-crud.html" class="btn btn-info">📝 Student CRUD</a>
+                <a href="/" class="btn btn-secondary me-2">Home</a>
+                <a href="student-crud.html" class="btn btn-info">CRUD operations</a>
             </div>
 
             <!-- Alert Messages -->
@@ -43,7 +43,7 @@
                 <!-- Register Form -->
                 <div class="card mb-3">
                     <div class="card-header bg-success text-white">
-                        <h5 class="mb-0">📝 Register New User</h5>
+                        <h5 class="mb-0">Register New User</h5>
                     </div>
                     <div class="card-body">
                         <form id="registerForm">
@@ -86,7 +86,7 @@
             <div id="userDashboard" class="hidden">
                 <div class="card">
                     <div class="card-header bg-info text-white">
-                        <h5 class="mb-0">👤 Welcome, <span id="currentUsername"></span>!</h5>
+                        <h5 class="mb-0">Welcome, <span id="currentUsername"></span>!</h5>
                     </div>
                     <div class="card-body">
                         <p class="mb-3">You are successfully authenticated. Your JWT token:</p>
@@ -94,13 +94,13 @@
                         
                         <div class="d-grid gap-2">
                             <button class="btn btn-success" onclick="testProtectedRoute()">
-                                🧪 Test Protected Route (/api/auth/me)
+                                Test Protected Route (/api/auth/me)
                             </button>
                             <a href="student-crud.html" class="btn btn-primary">
-                                📝 Go to Student CRUD (Now Authentication Required!)
+                                Go to CRUD Page (Now Authentication Required!)
                             </a>
                             <button class="btn btn-outline-danger" onclick="logout()">
-                                🚪 Logout
+                                Logout
                             </button>
                         </div>
                     </div>
@@ -113,7 +113,7 @@
             <!-- JWT Explanation -->
             <div class="card mt-4 border-warning">
                 <div class="card-header bg-warning">
-                    <h6 class="mb-0">📚 How JWT Authentication Works</h6>
+                    <h6 class="mb-0">How JWT Authentication Works</h6>
                 </div>
                 <div class="card-body">
                     <ol>
@@ -173,13 +173,13 @@
                 const result = await response.json();
                 
                 if (response.ok) {
-                    showMessage(`✅ Account created successfully! You can now login.`, 'success');
+                    showMessage(`Account created successfully! You can now login.`, 'success');
                     document.getElementById('registerForm').reset();
                 } else {
-                    showMessage(`❌ Registration failed: ${result.error}`, 'danger');
+                    showMessage(`Registration failed: ${result.error}`, 'danger');
                 }
             } catch (error) {
-                showMessage(`❌ Network error: ${error.message}`, 'danger');
+                showMessage(`Network error: ${error.message}`, 'danger');
             }
         });
 
@@ -206,15 +206,15 @@
                     localStorage.setItem('jwtToken', result.token);
                     localStorage.setItem('username', result.user.username);
                     
-                    showMessage(`✅ Login successful! Welcome, ${result.user.username}!`, 'success');
+                    showMessage(`Login successful! Welcome, ${result.user.username}!`, 'success');
                     setTimeout(() => {
                         showDashboard();
                     }, 1000);
                 } else {
-                    showMessage(`❌ Login failed: ${result.error}`, 'danger');
+                    showMessage(`Login failed: ${result.error}`, 'danger');
                 }
             } catch (error) {
-                showMessage(`❌ Network error: ${error.message}`, 'danger');
+                showMessage(`Network error: ${error.message}`, 'danger');
             }
         });
 
@@ -249,7 +249,7 @@
                     resultsDiv.innerHTML = `
                         <div class="card border-success">
                             <div class="card-header bg-success text-white">
-                                <h6 class="mb-0">✅ Protected Route Test: SUCCESS</h6>
+                                <h6 class="mb-0">Protected Route Test: SUCCESS</h6>
                             </div>
                             <div class="card-body">
                                 <p><strong>User Info from Server:</strong></p>
@@ -261,7 +261,7 @@
                     resultsDiv.innerHTML = `
                         <div class="card border-danger">
                             <div class="card-header bg-danger text-white">
-                                <h6 class="mb-0">❌ Protected Route Test: FAILED</h6>
+                                <h6 class="mb-0">Protected Route Test: FAILED</h6>
                             </div>
                             <div class="card-body">
                                 <p><strong>Error:</strong> ${result.error}</p>
@@ -273,7 +273,7 @@
                 document.getElementById('testResults').innerHTML = `
                     <div class="card border-danger">
                         <div class="card-header bg-danger text-white">
-                            <h6 class="mb-0">❌ Network Error</h6>
+                            <h6 class="mb-0">Network Error</h6>
                         </div>
                         <div class="card-body">
                             <p>${error.message}</p>
@@ -292,7 +292,7 @@
             document.getElementById('userDashboard').classList.add('hidden');
             document.getElementById('testResults').innerHTML = '';
             
-            showMessage('👋 Logged out successfully!', 'info');
+            showMessage('Logged out successfully!', 'info');
         }
     </script>
 </body>

@@ -94,15 +94,6 @@ app.get('/api/query', (req, res) => {
   // res.json({ message: `Hello, ${name} (from query param)` });
 });
 
-app.get('/api/url/:iaddasfsd', (req, res) => {
-
-  console.log("client request with URL param:", req.params.iaddasfsd);
-  // const name = req.query.name; 
-  // res.json({"message": `Hi, ${name}. How are you?`});
-
-});
-
-
 app.get('/api/body', (req, res) => {
 
   console.log("client request with POST body:", req.query);
@@ -229,35 +220,36 @@ app.get('/api/auth/me', authenticateToken, async (req, res) => {
 // CREATE - Add a new game (PROTECTED)
 app.post('/api/time', authenticateToken, async (req, res) => {
   try {
-    const { game, time, price } = req.body;
+    const { game, hours, price } = req.body;
 
     // Simple validation
-    if (!game || !time || !price) {
-      return res.status(400).json({ error: 'Game, time, and price are required' });
+    if (!game || !hours || !price) {
+      return res.status(400).json({ error: 'Game, hours, and price are required' });
     }
 
     const app = {
-      game,
-      time: parseInt(age),
-      price,
+      game: game,
+      hours: parseInt(hours),
+      price: parseInt(price),
       createdBy: req.user.username, // Track who created this student
       createdAt: new Date()
     };
-    const result = await db.collection('').insertOne(time);
 
-    console.log(`✅ Student created by ${req.user.username}: ${game}`);
+    const result = await db.collection('time').insertOne(app);
+
+    console.log(`Game created by ${req.user.username}: ${game}`);
 
     res.status(201).json({
       message: 'Game created successfully',
       gameId: result.insertedId,
-      app: { ...app, _id: result.insertedId }
+      app: { app, _id: result.insertedId }
     });
   } catch (error) {
     res.status(500).json({ error: 'Failed to create app: ' + error.message });
   }
 });
 
-// READ - Get all apps (PROTECTED)
+// READ - Get all games (PROTECTED)
 app.get('/api/time', authenticateToken, async (req, res) => {
   try {
     const apps = await db.collection('time').find({}).toArray();
@@ -268,21 +260,21 @@ app.get('/api/time', authenticateToken, async (req, res) => {
   }
 });
 
-// UPDATE - Update a student by ID (PROTECTED)
-app.put('/api/apps/:id', authenticateToken, async (req, res) => {
+// UPDATE - Update a game by ID (PROTECTED)
+app.put('/api/time/:id', authenticateToken, async (req, res) => {
   try {
     const { id } = req.params;
-    const { game, time, price } = req.body;
+    const { game, hours, price } = req.body;
 
     // Validate ObjectId
     if (!ObjectId.isValid(id)) {
-      return res.status(400).json({ error: 'Invalid student ID' });
+      return res.status(400).json({ error: 'Invalid game ID' });
     }
 
     const updateData = { updatedBy: req.user.username, updatedAt: new Date() };
     if (game) updateData.game = game;
-    if (time) updateData.time = parseInt(time);
-    if (grade) updateData.grade = parseInt(grade);
+    if (hours) updateData.hours = parseFloat(hours);
+    if (price) updateData.price = parseFloat(price);
 
     const result = await db.collection('time').updateOne(
       { _id: new ObjectId(id) },
@@ -293,7 +285,7 @@ app.put('/api/apps/:id', authenticateToken, async (req, res) => {
       return res.status(404).json({ error: 'Game not found' });
     }
 
-    console.log(`✏️ Game updated by ${req.user.username}: ${id}`);
+    console.log(`Game updated by ${req.user.username}: ${id}`);
 
     res.json({
       message: 'Game updated successfully',
@@ -320,7 +312,7 @@ app.delete('/api/time/:id', authenticateToken, async (req, res) => {
       return res.status(404).json({ error: 'Game not found' });
     }
 
-    console.log(`🗑️ Game deleted by ${req.user.username}: ${id}`);
+    console.log(`Game deleted by ${req.user.username}: ${id}`);
 
     res.json({
       message: 'Game deleted successfully',
@@ -339,18 +331,18 @@ app.post('/api/seed', authenticateToken, async (req, res) => {
 
     // Sample students for teaching
     const sampleGames = [
-      { name: "Balatro", hours: 11.3, price: 15.99, createdBy: req.user.username, createdAt: new Date() },
-      { name: "Baldur's Gate 3", hours: 490.9, price: 59.99, createdBy: req.user.username, createdAt: new Date() },
-      { name: "Dishonored 2", hours: 176.4, price: 9.99, createdBy: req.user.username, createdAt: new Date() },
-      { name: "Elden Ring", hours: 287.1, price: 59.99, createdBy: req.user.username, createdAt: new Date() },
-      { name: "Skryim", hours: 863.6, price: 9.99, createdBy: req.user.username, createdAt: new Date() },
-      { name: "Slay the Spire", hours: 101, price: 24.99, createdBy: req.user.username, createdAt: new Date() },
-      { name: "Starwars: KOTOR 2", hours: 226.1, price: 9.99, createdBy: req.user.username, createdAt: new Date() }
+      { game: "Balatro", hours: 11.3, price: 15.99, createdBy: req.user.username, createdAt: new Date() },
+      { game: "Baldur's Gate 3", hours: 490.9, price: 59.99, createdBy: req.user.username, createdAt: new Date() },
+      { game: "Dishonored 2", hours: 176.4, price: 9.99, createdBy: req.user.username, createdAt: new Date() },
+      { game: "Elden Ring", hours: 287.1, price: 59.99, createdBy: req.user.username, createdAt: new Date() },
+      { game: "Skryim", hours: 863.6, price: 9.99, createdBy: req.user.username, createdAt: new Date() },
+      { game: "Slay the Spire", hours: 101, price: 24.99, createdBy: req.user.username, createdAt: new Date() },
+      { game: "Starwars: KOTOR 2", hours: 226.1, price: 9.99, createdBy: req.user.username, createdAt: new Date() }
     ];
 
     const result = await db.collection('time').insertMany(sampleGames);
 
-    console.log(`🌱 Database seeded by ${req.user.username}: ${result.insertedCount} games`);
+    console.log(`Database seeded by ${req.user.username}: ${result.insertedCount} games`);
 
     res.json({
       message: `Database seeded successfully! Added ${result.insertedCount} sample games.`,
@@ -366,7 +358,7 @@ app.delete('/api/cleanup', authenticateToken, async (req, res) => {
   try {
     const result = await db.collection('time').deleteMany({});
 
-    console.log(`🧹 Database cleaned by ${req.user.username}: ${result.deletedCount} games removed`);
+    console.log(`Database cleaned by ${req.user.username}: ${result.deletedCount} games removed`);
 
     res.json({
       message: `Database cleaned successfully! Removed ${result.deletedCount} games.`,

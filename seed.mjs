@@ -14,13 +14,13 @@ const client = new MongoClient(uri, {
 
 // Sample data
   const sampleGames = [
-    { name: "Balatro", hours: 11.3, price: 15.99, createdBy: req.user.username, createdAt: new Date() },
-    { name: "Baldur's Gate 3", hours: 490.9, price: 59.99, createdBy: req.user.username, createdAt: new Date() },
-    { name: "Dishonored 2", hours: 176.4, price: 9.99, createdBy: req.user.username, createdAt: new Date() },
-    { name: "Elden Ring", hours: 287.1, price: 59.99, createdBy: req.user.username, createdAt: new Date() },
-    { name: "Skryim", hours: 863.6, price: 9.99, createdBy: req.user.username, createdAt: new Date() },
-    { name: "Slay the Spire", hours: 101, price: 24.99, createdBy: req.user.username, createdAt: new Date() },
-    { name: "Starwars: KOTOR 2", hours: 226.1, price: 9.99, createdBy: req.user.username, createdAt: new Date() }
+    { game: "Balatro", hours: 11.3, price: 15.99, createdBy: req.user.username, createdAt: new Date() },
+    { game: "Baldur's Gate 3", hours: 490.9, price: 59.99, createdBy: req.user.username, createdAt: new Date() },
+    { game: "Dishonored 2", hours: 176.4, price: 9.99, createdBy: req.user.username, createdAt: new Date() },
+    { game: "Elden Ring", hours: 287.1, price: 59.99, createdBy: req.user.username, createdAt: new Date() },
+    { game: "Skryim", hours: 863.6, price: 9.99, createdBy: req.user.username, createdAt: new Date() },
+    { game: "Slay the Spire", hours: 101, price: 24.99, createdBy: req.user.username, createdAt: new Date() },
+    { game: "Starwars: KOTOR 2", hours: 226.1, price: 9.99, createdBy: req.user.username, createdAt: new Date() }
   ];
 
 async function seedDatabase() {
