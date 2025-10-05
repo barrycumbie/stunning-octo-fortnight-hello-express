@@ -65,45 +65,17 @@ function authenticateToken(req, res, next) {
 
 
 app.get('/', (req, res) => {
-  res.send('Hello Express from Render 😍😍😍. <a href="barry">barry</a><br><a href="student-crud.html">📝 crud time!</a><br><a href="advanced-student-manager.html">🚀 Advanced CRUD!</a><br><a href="auth.html">🔐 JWT Authentication</a>')
-})
-
-// endpoints...middlewares...apis? 
-
-// send an html file
-app.get('/barry', (req, res) => {
-
-  res.sendFile(join(__dirname, 'public', 'barry.html'))
-
-})
-
-app.get('/api/barry', (req, res) => {
-  // res.send('barry. <a href="/">home</a>')
-  const myVar = 'Hello from server!';
-  res.json({ myVar });
+    res.redirect('/auth.html');
 })
 
 app.get('/api/query', (req, res) => {
-
-  //console.log("client request with query param:", req.query.name); 
   const name = req.query.name;
   res.json({ "message": `Hi, ${name}. How are you?` });
-
-  // receivedData.queries.push(req.query.name || 'Guest');
-  // const name = req.query.name || 'Guest';
-  // res.json({ message: `Hello, ${name} (from query param)` });
 });
 
 app.get('/api/body', (req, res) => {
-
   console.log("client request with POST body:", req.query);
-  // const name = req.body.name; 
-  // res.json({"message": `Hi, ${name}. How are you?`});
-
 });
-
-// AUTHENTICATION ENDPOINTS FOR TEACHING
-// Collection: users (documents with username, password fields)
 
 // Register new user
 app.post('/api/auth/register', async (req, res) => {
@@ -151,16 +123,6 @@ app.post('/api/auth/login', async (req, res) => {
   try {
     const { username, password } = req.body;
 
-    /* DESTRUCTURING. 
-    The syntax { username, password } = req.body means:
-    Pull out the properties named username and password directly into variables with the same names.
-    So instead of writing:
-       const username = req.body.username;
-       const password = req.body.password;
-    
-       you can write it in one compact line.
-    */
-
     // Simple validation
     if (!username || !password) {
       return res.status(400).json({ error: 'Username and password are required' });
@@ -203,7 +165,7 @@ app.get('/api/auth/me', authenticateToken, async (req, res) => {
   try {
     const user = await db.collection('users').findOne(
       { _id: new ObjectId(req.user.userId) },
-      { projection: { password: 0 } } // Don't return password
+      { projection: { password: 0 } }
     );
 
     if (!user) {
@@ -325,6 +287,7 @@ app.delete('/api/time/:id', authenticateToken, async (req, res) => {
 
 // SEED - Add sample data for teaching (PROTECTED)
 app.post('/api/seed', authenticateToken, async (req, res) => {
+  
   try {
     // First, clear existing data
     await db.collection('time').deleteMany({});
@@ -332,7 +295,7 @@ app.post('/api/seed', authenticateToken, async (req, res) => {
     // Sample students for teaching
     const sampleGames = [
       { game: "Balatro", hours: 11.3, price: 15.99, createdBy: req.user.username, createdAt: new Date() },
-      { game: "Baldur's Gate 3", hours: 490.9, price: 59.99, createdBy: req.user.username, createdAt: new Date() },
+      { game: "Baldurs Gate 3", hours: 490.9, price: 59.99, createdBy: req.user.username, createdAt: new Date() },
       { game: "Dishonored 2", hours: 176.4, price: 9.99, createdBy: req.user.username, createdAt: new Date() },
       { game: "Elden Ring", hours: 287.1, price: 59.99, createdBy: req.user.username, createdAt: new Date() },
       { game: "Skryim", hours: 863.6, price: 9.99, createdBy: req.user.username, createdAt: new Date() },
