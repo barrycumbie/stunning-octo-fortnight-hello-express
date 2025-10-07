@@ -6,6 +6,16 @@
     <title>JWT Authentication Demo</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
+        body {
+            background: radial-gradient(circle, #2a475e, #1b2838);
+            height: 100vh;
+            margin: 0;
+            color: #c7d5e0;
+        }
+        .card-color {
+            background: #171a21;
+            color: #c7d5e0;
+        }
         .auth-container {
             max-width: 500px;
             margin: 50px auto;
@@ -32,17 +42,39 @@
             <!-- Navigation -->
             <div class="text-center mb-4">
                 <a href="quick-view.html" class="btn btn-secondary me-2 hidden" id="quick">Quick View</a>
+            </div>
+            <div class="text-center mb-4">
                 <a href="game-crud.html" class="btn btn-info hidden" id="game">CRUD View</a>
             </div>
-
             <!-- Alert Messages -->
             <div id="messages"></div>
 
             <!-- Login/Register Forms (shown when not authenticated) -->
             <div id="authForms">
+
+                <!-- Login Form -->
+                <div class="card">
+                    <div class="card-header card-color">
+                        <h5 class="mb-0">Login</h5>
+                    </div>
+                    <div class="card-body">
+                        <form id="loginForm">
+                            <div class="mb-3">
+                                <label for="loginUsername" class="form-label">Username</label>
+                                <input type="text" class="form-control" id="loginUsername" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="loginPassword" class="form-label">Password</label>
+                                <input type="password" class="form-control" id="loginPassword" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">Login</button>
+                        </form>
+                    </div>
+                </div>
+
                 <!-- Register Form -->
                 <div class="card mb-3">
-                    <div class="card-header bg-success text-white">
+                    <div class="card-header text-white  card-color">
                         <h5 class="mb-0">Register New User</h5>
                     </div>
                     <div class="card-body">
@@ -60,53 +92,9 @@
                         </form>
                     </div>
                 </div>
-
-                <!-- Login Form -->
-                <div class="card">
-                    <div class="card-header bg-primary text-white">
-                        <h5 class="mb-0">🔑 Login</h5>
-                    </div>
-                    <div class="card-body">
-                        <form id="loginForm">
-                            <div class="mb-3">
-                                <label for="loginUsername" class="form-label">Username</label>
-                                <input type="text" class="form-control" id="loginUsername" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="loginPassword" class="form-label">Password</label>
-                                <input type="password" class="form-control" id="loginPassword" required>
-                            </div>
-                            <button type="submit" class="btn btn-primary w-100">Login</button>
-                        </form>
-                    </div>
-                </div>
             </div>
-
-            <!-- User Dashboard (shown when authenticated) -->
-            <div id="userDashboard" class="hidden">
-                <div class="card">
-                    <div class="card-header bg-info text-white">
-                        <h5 class="mb-0">Welcome, <span id="currentUsername"></span>!</h5>
-                    </div>
-                    <div class="card-body">
-                        <p class="mb-3">You are successfully authenticated. Your JWT token:</p>
-                        <div class="token-display mb-3" id="tokenDisplay"></div>
-                        
-                        <div class="d-grid gap-2">
-                            <button class="btn btn-success" onclick="testProtectedRoute()">
-                                Test Protected Route (/api/auth/me)
-                            </button>
-                            <a href="game-crud.html" class="btn btn-primary">
-                                Go to CRUD Page (Now Authentication Required!)
-                            </a>
-                            <button class="btn btn-outline-danger" onclick="logout()">
-                                Logout
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-
+        </div>
+    </div>      
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         // Check if user is already logged in
@@ -184,6 +172,10 @@
                     localStorage.setItem('username', result.user.username);
                     
                     showMessage(`Login successful! Welcome, ${result.user.username}!`, 'success');
+
+                    
+                    window.location.replace('/quick-view.html')
+                    
 
                     document.getElementById('game').classList.remove('hidden');
                     document.getElementById('quick').classList.remove('hidden');
