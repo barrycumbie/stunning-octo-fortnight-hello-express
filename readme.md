@@ -5,6 +5,6 @@
 
 - [Steam Value Tracker](https://ite-cap-first-real.onrender.com/)
 
-- [Repo](https://github.com/Jconkle5/Mini-App-Repo/)
+- [Repo](https://github.com/Jconkle5/stunning-octo-fortnight-hello-express)
 
 This app is a clean way to track the value you get out of your steam games. For each game you add into the DB, it tracks the hours played and the price payed. It will take those and calculate a total hours per dollar spent so you know which games give you the best deal.
