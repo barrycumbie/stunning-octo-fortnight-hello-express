@@ -4,6 +4,9 @@ import { dirname, join } from 'path';
 import { MongoClient, ServerApiVersion, ObjectId } from 'mongodb';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
+import 'dotenv/config';
+
+
 
 const app = express()
 const PORT = process.env.PORT || 3000;
@@ -30,16 +33,13 @@ let db;
 async function connectDB() {
   try {
     await client.connect();
-    db = client.db("school"); // Database name
+    db = client.db("steam_apps"); // Database name
     console.log("Connected to MongoDB!");
   } catch (error) {
     console.error("Failed to connect to MongoDB:", error);
   }
 }
 connectDB();
-
-// JWT Secret (in production, this should be in .env file)
-const JWT_SECRET = 'super-secret-key-for-demo-only';
 
 // JWT Middleware - Protect routes that require authentication
 function authenticateToken(req, res, next) {
@@ -62,54 +62,17 @@ function authenticateToken(req, res, next) {
 
 
 app.get('/', (req, res) => {
-  res.send('Hello Express from Render 😍😍😍. <a href="barry">barry</a><br><a href="student-crud.html">📝 crud time!</a><br><a href="advanced-student-manager.html">🚀 Advanced CRUD!</a><br><a href="auth.html">🔐 JWT Authentication</a>')
-})
-
-// endpoints...middlewares...apis? 
-
-// send an html file
-app.get('/barry', (req, res) => {
-
-  res.sendFile(join(__dirname, 'public', 'barry.html'))
-
-})
-
-app.get('/api/barry', (req, res) => {
-  // res.send('barry. <a href="/">home</a>')
-  const myVar = 'Hello from server!';
-  res.json({ myVar });
+    res.redirect('/auth.html');
 })
 
 app.get('/api/query', (req, res) => {
-
-  //console.log("client request with query param:", req.query.name); 
   const name = req.query.name;
   res.json({ "message": `Hi, ${name}. How are you?` });
-
-  // receivedData.queries.push(req.query.name || 'Guest');
-  // const name = req.query.name || 'Guest';
-  // res.json({ message: `Hello, ${name} (from query param)` });
 });
-
-app.get('/api/url/:iaddasfsd', (req, res) => {
-
-  console.log("client request with URL param:", req.params.iaddasfsd);
-  // const name = req.query.name; 
-  // res.json({"message": `Hi, ${name}. How are you?`});
-
-});
-
 
 app.get('/api/body', (req, res) => {
-
   console.log("client request with POST body:", req.query);
-  // const name = req.body.name; 
-  // res.json({"message": `Hi, ${name}. How are you?`});
-
 });
-
-// AUTHENTICATION ENDPOINTS FOR TEACHING
-// Collection: users (documents with username, password fields)
 
 // Register new user
 app.post('/api/auth/register', async (req, res) => {
@@ -157,16 +120,6 @@ app.post('/api/auth/login', async (req, res) => {
   try {
     const { username, password } = req.body;
 
-    /* DESTRUCTURING. 
-    The syntax { username, password } = req.body means:
-    Pull out the properties named username and password directly into variables with the same names.
-    So instead of writing:
-       const username = req.body.username;
-       const password = req.body.password;
-    
-       you can write it in one compact line.
-    */
-
     // Simple validation
     if (!username || !password) {
       return res.status(400).json({ error: 'Username and password are required' });
@@ -209,7 +162,7 @@ app.get('/api/auth/me', authenticateToken, async (req, res) => {
   try {
     const user = await db.collection('users').findOne(
       { _id: new ObjectId(req.user.userId) },
-      { projection: { password: 0 } } // Don't return password
+      { projection: { password: 0 } }
     );
 
     if (!user) {
@@ -222,80 +175,79 @@ app.get('/api/auth/me', authenticateToken, async (req, res) => {
   }
 });
 
-// CRUD ENDPOINTS FOR TEACHING
-// Collection: students (documents with name, age, grade fields)
 
-// CREATE - Add a new student (PROTECTED)
-app.post('/api/students', authenticateToken, async (req, res) => {
+// CREATE - Add a new game (PROTECTED)
+app.post('/api/time', authenticateToken, async (req, res) => {
   try {
-    const { name, age, grade } = req.body;
+    const { game, hours, price } = req.body;
 
     // Simple validation
-    if (!name || !age || !grade) {
-      return res.status(400).json({ error: 'Name, age, and grade are required' });
+    if (!game || !hours || !price) {
+      return res.status(400).json({ error: 'Game, hours, and price are required' });
     }
 
-    const student = {
-      name,
-      age: parseInt(age),
-      grade,
+    const app = {
+      game: game,
+      hours: parseInt(hours),
+      price: parseInt(price),
       createdBy: req.user.username, // Track who created this student
       createdAt: new Date()
     };
-    const result = await db.collection('students').insertOne(student);
 
-    console.log(`✅ Student created by ${req.user.username}: ${name}`);
+    const result = await db.collection('time').insertOne(app);
+
+    console.log(`Game created by ${req.user.username}: ${game}`);
 
     res.status(201).json({
-      message: 'Student created successfully',
-      studentId: result.insertedId,
-      student: { ...student, _id: result.insertedId }
+      message: 'Game created successfully',
+      gameId: result.insertedId,
+      app: { app, _id: result.insertedId }
     });
   } catch (error) {
-    res.status(500).json({ error: 'Failed to create student: ' + error.message });
+    res.status(500).json({ error: 'Failed to create app: ' + error.message });
   }
 });
 
-// READ - Get all students (PROTECTED)
-app.get('/api/students', authenticateToken, async (req, res) => {
+// READ - Get all games (PROTECTED)
+app.get('/api/time', authenticateToken, async (req, res) => {
   try {
-    const students = await db.collection('students').find({}).toArray();
-    console.log(`📋 ${req.user.username} viewed ${students.length} students`);
-    res.json(students); // Return just the array for frontend simplicity
+    const apps = await db.collection('time').find({}).toArray();
+    console.log(`📋 ${req.user.username} viewed ${apps.length} apps`);
+    res.json(apps); // Return just the array for frontend simplicity
   } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch students: ' + error.message });
+    res.status(500).json({ error: 'Failed to fetch apps: ' + error.message });
   }
 });
 
-// UPDATE - Update a student by ID (PROTECTED)
-app.put('/api/students/:id', authenticateToken, async (req, res) => {
+// UPDATE - Update a game by ID (PROTECTED)
+app.put('/api/time/:id', authenticateToken, async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, age, grade } = req.body;
+    const { game, hours, price } = req.body;
 
     // Validate ObjectId
     if (!ObjectId.isValid(id)) {
-      return res.status(400).json({ error: 'Invalid student ID' });
+      return res.status(400).json({ error: 'Invalid game ID' });
     }
 
     const updateData = { updatedBy: req.user.username, updatedAt: new Date() };
-    if (name) updateData.name = name;
-    if (age) updateData.age = parseInt(age);
-    if (grade) updateData.grade = grade;
+    if (game) updateData.game = game;
+    if (hours) updateData.hours = parseFloat(hours);
+    if (price) updateData.price = parseFloat(price);
 
-    const result = await db.collection('students').updateOne(
+    const result = await db.collection('time').updateOne(
       { _id: new ObjectId(id) },
       { $set: updateData }
     );
 
     if (result.matchedCount === 0) {
-      return res.status(404).json({ error: 'Student not found' });
+      return res.status(404).json({ error: 'Game not found' });
     }
 
-    console.log(`✏️ Student updated by ${req.user.username}: ${id}`);
+    console.log(`Game updated by ${req.user.username}: ${id}`);
 
     res.json({
-      message: 'Student updated successfully',
+      message: 'Game updated successfully',
       modifiedCount: result.modifiedCount
     });
   } catch (error) {
@@ -304,56 +256,56 @@ app.put('/api/students/:id', authenticateToken, async (req, res) => {
 });
 
 // DELETE - Delete a student by ID (PROTECTED)
-app.delete('/api/students/:id', authenticateToken, async (req, res) => {
+app.delete('/api/time/:id', authenticateToken, async (req, res) => {
   try {
     const { id } = req.params;
 
     // Validate ObjectId
     if (!ObjectId.isValid(id)) {
-      return res.status(400).json({ error: 'Invalid student ID' });
+      return res.status(400).json({ error: 'Invalid Object ID' });
     }
 
-    const result = await db.collection('students').deleteOne({ _id: new ObjectId(id) });
+    const result = await db.collection('time').deleteOne({ _id: new ObjectId(id) });
 
     if (result.deletedCount === 0) {
-      return res.status(404).json({ error: 'Student not found' });
+      return res.status(404).json({ error: 'Game not found' });
     }
 
-    console.log(`🗑️ Student deleted by ${req.user.username}: ${id}`);
+    console.log(`Game deleted by ${req.user.username}: ${id}`);
 
     res.json({
-      message: 'Student deleted successfully',
+      message: 'Game deleted successfully',
       deletedCount: result.deletedCount
     });
   } catch (error) {
-    res.status(500).json({ error: 'Failed to delete student: ' + error.message });
+    res.status(500).json({ error: 'Failed to delete game: ' + error.message });
   }
 });
 
 // SEED - Add sample data for teaching (PROTECTED)
 app.post('/api/seed', authenticateToken, async (req, res) => {
+  
   try {
     // First, clear existing data
-    await db.collection('students').deleteMany({});
+    await db.collection('time').deleteMany({});
 
-    // Sample students for teaching
-    const sampleStudents = [
-      { name: "Alice Johnson", age: 20, grade: "A", createdBy: req.user.username, createdAt: new Date() },
-      { name: "Bob Smith", age: 19, grade: "B+", createdBy: req.user.username, createdAt: new Date() },
-      { name: "Charlie Brown", age: 21, grade: "A-", createdBy: req.user.username, createdAt: new Date() },
-      { name: "Diana Prince", age: 18, grade: "A+", createdBy: req.user.username, createdAt: new Date() },
-      { name: "Edward Norton", age: 22, grade: "B", createdBy: req.user.username, createdAt: new Date() },
-      { name: "Fiona Apple", age: 19, grade: "A", createdBy: req.user.username, createdAt: new Date() },
-      { name: "George Wilson", age: 20, grade: "C+", createdBy: req.user.username, createdAt: new Date() },
-      { name: "Hannah Montana", age: 18, grade: "B-", createdBy: req.user.username, createdAt: new Date() }
+    // Sample games for seeding
+    const sampleGames = [
+      { game: "Balatro", hours: 11.3, price: 15.99, createdBy: req.user.username, createdAt: new Date() },
+      { game: "Baldurs Gate 3", hours: 490.9, price: 59.99, createdBy: req.user.username, createdAt: new Date() },
+      { game: "Dishonored 2", hours: 176.4, price: 9.99, createdBy: req.user.username, createdAt: new Date() },
+      { game: "Elden Ring", hours: 287.1, price: 59.99, createdBy: req.user.username, createdAt: new Date() },
+      { game: "Skryim", hours: 863.6, price: 9.99, createdBy: req.user.username, createdAt: new Date() },
+      { game: "Slay the Spire", hours: 101, price: 24.99, createdBy: req.user.username, createdAt: new Date() },
+      { game: "Starwars: KOTOR 2", hours: 226.1, price: 9.99, createdBy: req.user.username, createdAt: new Date() }
     ];
 
-    const result = await db.collection('students').insertMany(sampleStudents);
+    const result = await db.collection('time').insertMany(sampleGames);
 
-    console.log(`🌱 Database seeded by ${req.user.username}: ${result.insertedCount} students`);
+    console.log(`Database seeded by ${req.user.username}: ${result.insertedCount} games`);
 
     res.json({
-      message: `Database seeded successfully! Added ${result.insertedCount} sample students.`,
+      message: `Database seeded successfully! Added ${result.insertedCount} sample games.`,
       insertedCount: result.insertedCount
     });
   } catch (error) {
@@ -364,12 +316,12 @@ app.post('/api/seed', authenticateToken, async (req, res) => {
 // CLEANUP - Remove all student data (PROTECTED)
 app.delete('/api/cleanup', authenticateToken, async (req, res) => {
   try {
-    const result = await db.collection('students').deleteMany({});
+    const result = await db.collection('time').deleteMany({});
 
-    console.log(`🧹 Database cleaned by ${req.user.username}: ${result.deletedCount} students removed`);
+    console.log(`Database cleaned by ${req.user.username}: ${result.deletedCount} games removed`);
 
     res.json({
-      message: `Database cleaned successfully! Removed ${result.deletedCount} students.`,
+      message: `Database cleaned successfully! Removed ${result.deletedCount} games.`,
       deletedCount: result.deletedCount
     });
   } catch (error) {

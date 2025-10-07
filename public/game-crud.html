@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game CRUD App</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+    body {
+            background: radial-gradient(circle, #2a475e, #1b2838);
+            height: 100vh;
+            margin: 0;
+            color: #c7d5e0;
+        }
+        .card-color {
+            background: #171a21;
+            color: #c7d5e0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Game Management System</h1>
+        
+        <!-- Authentication Status -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card card-color">
+                    <div class="card-body card-color text-center">
+                        <div id="authStatus">
+                            <p class="text-muted">Checking authentication...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content (hidden until authenticated) -->
+        <div id="mainContent" style="display: none;">
+            <!-- Database Management Section -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="card card-color">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">Database Management</h5>
+                            <button class="btn btn-success me-2" onclick="seedDatabase()">🌱 Seed Database</button>
+                            <button class="btn btn-danger" onclick="cleanupDatabase()">🧹 Cleanup Database</button>
+                            <button class="btn btn-secondary" onclick="window.location.replace('/quick-view.html')">Quick View</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        <!-- Add Game Form -->
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <div class="card card-color">
+                    <div class="card-header">
+                        <h5>Add New Game</h5>
+                    </div>
+                    <div class="card-body">
+                        <form id="addGameForm">
+                            <div class="mb-3">
+                                <label for="game" class="form-label">Game</label>
+                                <input type="text" class="form-control" placeholder="Name" id="game" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="hours" class="form-label">Hours</label>
+                                <input type="number" class="form-control" id="hours" placeholder="99.9" step="0.1" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="price" class="form-label">Price</label>
+                                <input type="number" class="form-control" id="price" placeholder="59.99" step="0.01" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Add Game</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Update Game Form -->
+            <div class="col-md-6">
+                <div class="card card-color">
+                    <div class="card-header">
+                        <h5>Update Games</h5>
+                    </div>
+                    <div class="card-body">
+                        <form id="updateGameForm">
+                            <div class="mb-3">
+                                <label for="updateId" class="form-label">Game ID</label>
+                                <input type="text" class="form-control" id="updateId" placeholder="Click on a game ID below" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="updateGame" class="form-label">Game</label>
+                                <input type="text" class="form-control" id="updateGame" placeholder="Name" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="updateHours" class="form-label">Hours</label>
+                                <input type="number" class="form-control" id="updateHours" placeholder="99.9" step="0.1" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="updatePrice" class="form-label">Price</label>
+                                <input type="number" class="form-control" id="updatePrice" placeholder="59.99" step="0.01">
+                            </div>
+                            <button type="submit" class="btn btn-warning">Update Game</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Games List -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card card-color">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5>All Games</h5>
+                        <button class="btn btn-info btn-sm" onclick="loadGames()">🔄 Refresh</button>
+                    </div>
+                    <div class="card-body">
+                        <div id="gamesList">
+                            <p class="text-muted">Click "Refresh" to load games...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Messages -->
+        <div id="messages" class="mt-3"></div>
+        </div> <!-- End main content -->
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Authentication helpers
+        function getAuthHeaders() {
+            const token = localStorage.getItem('jwtToken');
+            if (!token) return null;
+            
+            return {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            };
+        }
+
+        function checkAuthentication() {
+            const token = localStorage.getItem('jwtToken');
+            const username = localStorage.getItem('username');
+            const authStatus = document.getElementById('authStatus');
+            const mainContent = document.getElementById('mainContent');
+
+            if (!token) {
+                authStatus.innerHTML = `
+                    <h5 class="text-danger">Authentication Required</h5>
+                    <p>You need to login to access CRUD operations.</p>
+                    <a href="auth.html" class="btn btn-primary">Go to Login Page</a>
+                `;
+                mainContent.style.display = 'none';
+                return false;
+            } else {
+                authStatus.innerHTML = `
+                    <h5 class="text-success">Authenticated as: ${username}</h5>
+                    <a href="auth.html" class="btn btn-outline-secondary btn-sm">Auth Dashboard</a>
+                    <button onclick="logout()" class="btn btn-outline-danger btn-sm ms-2">Logout</button>
+                `;
+                mainContent.style.display = 'block';
+                return true;
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('jwtToken');
+            localStorage.removeItem('username');
+            checkAuthentication();
+            showMessage('Logged out successfully!', 'info');
+        }
+
+        // Check authentication on page load
+        window.addEventListener('load', () => {
+            if (checkAuthentication()) {
+                loadGames();
+            }
+        });
+        // Show message to user
+        function showMessage(message, type = 'info') {
+            const messagesDiv = document.getElementById('messages');
+            messagesDiv.innerHTML = `
+                <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+                    ${message}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            `;
+            setTimeout(() => {
+                messagesDiv.innerHTML = '';
+            }, 5000);
+        }
+
+        // CREATE - Add new game
+        document.getElementById('addGameForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const headers = getAuthHeaders();
+            if (!headers) {
+                showMessage('Authentication required. Please login first.', 'danger');
+                return;
+            }
+
+            const app = {
+                game: document.getElementById('game').value,
+                hours: parseFloat(document.getElementById('hours').value),
+                price: parseFloat(document.getElementById('price').value)
+            };
+
+            try {
+                const response = await fetch('/api/time', {
+                    method: 'POST',
+                    headers: headers,
+                    body: JSON.stringify(app)
+                });
+
+                const result = await response.json();
+                
+                if (response.ok) {
+                    showMessage(`Game "${app.game}" added successfully!`, 'success');
+                    document.getElementById('addGameForm').reset();
+                    loadGames(); // Refresh the list
+                } else {
+                    if (response.status === 401 || response.status === 403) {
+                        showMessage('Authentication failed. Please login again.', 'danger');
+                        logout();
+                    } else {
+                        showMessage(`Error: ${result.error}`, 'danger');
+                    }
+                }
+            } catch (error) {
+                showMessage(`Network error: ${error.message}`, 'danger');
+            }
+        });
+
+        // READ - Load all games
+        async function loadGames() {
+            const headers = getAuthHeaders();
+            if (!headers) {
+                showMessage('Authentication required. Please login first.', 'danger');
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/time', {
+                    method: 'GET',
+                    headers: headers
+                });
+                
+                if (response.status === 401 || response.status === 403) {
+                    showMessage('Authentication failed. Please login again.', 'danger');
+                    logout();
+                    return;
+                }
+
+                const games = await response.json();
+
+                const appList = document.getElementById('appList');
+                
+                if (games.length === 0) {
+                    gamesList.innerHTML = '<p class="text-muted">No games found. Try seeding the database!</p>';
+                    return;
+                }
+
+                gamesList.innerHTML = games.map(app => {
+                    var val = (app.hours / app.price).toFixed(2);
+                    return `
+                    <div class="card mb-2">
+                        <div class="card-body d-flex justify-content-between align-items-center">
+                            <div>
+                                <strong>${app.game}</strong> | Hours: ${app.hours} | Price: \$${app.price} | Value: \$${val}/hr
+                                <br>
+                                <small class="text-muted">ID: <span class="game-id" style="cursor: pointer; text-decoration: underline;" 
+                                    data-id="${app._id}" 
+                                    data-game="${app.game}" 
+                                    data-hours="${app.hours}" 
+                                    data-price="${app.price}">${app._id}</span></small>
+                                ${app.createdBy ? `<br><small class="text-muted">Created by: ${app.createdBy}</small>` : ''}
+                            </div>
+                            <button class="btn btn-outline-danger btn-sm delete-btn" 
+                                data-app-id="${app._id}" 
+                                data-app-game="${app.game}"
+                                >Delete
+                            </button>
+                        </div>
+                    </div>
+                `}).join('');
+                
+                // Add click event listeners for game IDs
+                document.querySelectorAll('.game-id').forEach(span => {
+                    span.addEventListener('click', function() {
+                        const id = this.getAttribute('data-id');
+                        const game = this.getAttribute('data-game');
+                        const hours = this.getAttribute('data-hours');
+                        const price = this.getAttribute('data-price');
+                        fillUpdateForm(id, game, hours, price);
+                    });
+                });
+                
+                // Add click event listeners for delete buttons
+                document.querySelectorAll('.delete-btn').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const id = this.getAttribute('data-app-id');
+                        const game = this.getAttribute('data-app-game');
+                        console.log(id, game)
+                        deleteGame(id, game);
+                    });
+                });
+                
+                showMessage(`Loaded ${games.length} games`, 'info');
+            } catch (error) {
+                showMessage(`Error loading games: ${error.message}`, 'danger');
+            }
+        }
+
+        // Fill update form when clicking on game ID
+        function fillUpdateForm(id, game, hours, price) {
+            document.getElementById('updateId').value = id;
+            document.getElementById('updateGame').value = game;
+            document.getElementById('updateHours').value = hours;
+            document.getElementById('updatePrice').value = price;
+            showMessage('Game data loaded in update form', 'info');
+        }
+
+        // UPDATE - Update game
+        document.getElementById('updateGameForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const headers = getAuthHeaders();
+            if (!headers) {
+                showMessage('Authentication required. Please login first.', 'danger');
+                return;
+            }
+
+            const id = document.getElementById('updateId').value;
+            const app = {
+                game: document.getElementById('updateGame').value,
+                hours: parseFloat(document.getElementById('updateHours').value),
+                price: parseFloat(document.getElementById('updatePrice').value)
+            };
+
+            try {
+                const response = await fetch(`/api/time/${id}`, {
+                    method: 'PUT',
+                    headers: headers,
+                    body: JSON.stringify(app)
+                });
+
+                const result = await response.json();
+                
+                if (response.ok) {
+
+                    showMessage(`Game "${app.game}" updated successfully!`, 'success');
+                    document.getElementById('updateGameForm').reset();
+                    loadGames(); // Refresh the list
+                } else {
+                    showMessage(`Error: ${result.error}`, 'danger');
+                }
+            } catch (error) {
+                showMessage(`Network error: ${error.message}`, 'danger');
+            }
+        });
+
+        // DELETE - Delete game
+        async function deleteGame(id, game) {
+            if (!confirm(`Are you sure you want to delete "${game}"?`)) {
+                return;
+            }
+
+            const headers = getAuthHeaders();
+            if (!headers) {
+                showMessage('Authentication required. Please login first.', 'danger');
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/time/${id}`, {
+                    method: 'DELETE',
+                    headers: headers
+                });
+
+                const result = await response.json();
+                
+                if (response.ok) {
+                    showMessage(`Game "${game}" deleted successfully!`, 'success');
+                    loadGames(); // Refresh the list
+                } else {
+                    showMessage(`Error: ${result.error}`, 'danger');
+                }
+            } catch (error) {
+                showMessage(`Network error: ${error.message}`, 'danger');
+            }
+        }
+
+        // Seed Database
+        async function seedDatabase() {
+            const headers = getAuthHeaders();
+            if (!headers) {
+                showMessage('Authentication required. Please login first.', 'danger');
+                return;
+            }
+
+            if (!confirm('This will add sample games to the database. Continue?')) {
+                return;
+            }
+
+            try {
+                showMessage('Seeding database...', 'info');
+                const response = await fetch('/api/seed', {
+                    method: 'POST',
+                    headers: headers
+                });
+
+                if (response.status === 401 || response.status === 403) {
+                    showMessage('Authentication failed. Please login again.', 'danger');
+                    logout();
+                    return;
+                }
+
+                const result = await response.json();
+                
+                if (response.ok) {
+                    showMessage(`${result.message}`, 'success');
+                    loadGames(); // Refresh the list
+                } else {
+                    showMessage(`Error: ${result.error}`, 'danger');
+                }
+            } catch (error) {
+                showMessage(`Network error: ${error.message}`, 'danger');
+            }
+        }
+
+        // Cleanup Database
+        async function cleanupDatabase() {
+            const headers = getAuthHeaders();
+            if (!headers) {
+                showMessage('Authentication required. Please login first.', 'danger');
+                return;
+            }
+
+            if (!confirm('This will DELETE ALL games from the database. Are you sure?')) {
+                return;
+            }
+
+            try {
+                showMessage('Cleaning database...', 'info');
+                const response = await fetch('/api/cleanup', {
+                    method: 'DELETE',
+                    headers: headers
+                });
+
+                if (response.status === 401 || response.status === 403) {
+                    showMessage('Authentication failed. Please login again.', 'danger');
+                    logout();
+                    return;
+                }
+
+                const result = await response.json();
+                
+                if (response.ok) {
+                    showMessage(`${result.message}`, 'success');
+                    loadGames(); // Refresh the list
+                } else {
+                    showMessage(`Error: ${result.error}`, 'danger');
+                }
+            } catch (error) {
+                showMessage(`Network error: ${error.message}`, 'danger');
+            }
+        }
+
+        // Load games when page loads
+        window.addEventListener('load', loadGames);
+    </script>
+</body>
+</html>
