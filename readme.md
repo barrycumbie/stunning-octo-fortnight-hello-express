@@ -1,3 +1,5 @@
+# CIS 486 MINI APPs
+
 ### Gage Bays — Schedule Manager
 
 Deployed App: https://student-manager-ydpi.onrender.com
