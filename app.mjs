@@ -292,7 +292,7 @@ app.post('/api/seed', authenticateToken, async (req, res) => {
     // First, clear existing data
     await db.collection('time').deleteMany({});
 
-    // Sample students for teaching
+    // Sample games for seeding
     const sampleGames = [
       { game: "Balatro", hours: 11.3, price: 15.99, createdBy: req.user.username, createdAt: new Date() },
       { game: "Baldurs Gate 3", hours: 490.9, price: 59.99, createdBy: req.user.username, createdAt: new Date() },

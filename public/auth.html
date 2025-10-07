@@ -31,8 +31,8 @@
             
             <!-- Navigation -->
             <div class="text-center mb-4">
-                <a href="/" class="btn btn-secondary me-2">Home</a>
-                <a href="student-crud.html" class="btn btn-info">CRUD operations</a>
+                <a href="quick-view.html" class="btn btn-secondary me-2 hidden" id="quick">Quick View</a>
+                <a href="game-crud.html" class="btn btn-info hidden" id="game">CRUD View</a>
             </div>
 
             <!-- Alert Messages -->
@@ -96,7 +96,7 @@
                             <button class="btn btn-success" onclick="testProtectedRoute()">
                                 Test Protected Route (/api/auth/me)
                             </button>
-                            <a href="student-crud.html" class="btn btn-primary">
+                            <a href="game-crud.html" class="btn btn-primary">
                                 Go to CRUD Page (Now Authentication Required!)
                             </a>
                             <button class="btn btn-outline-danger" onclick="logout()">
@@ -113,7 +113,7 @@
         window.addEventListener('load', () => {
             const token = localStorage.getItem('jwtToken');
             if (token) {
-                window.location.replace('/advanced-student-manager.html')
+                window.location.replace('/quick-view.html')
             }
         });
 
@@ -184,6 +184,10 @@
                     localStorage.setItem('username', result.user.username);
                     
                     showMessage(`Login successful! Welcome, ${result.user.username}!`, 'success');
+
+                    document.getElementById('game').classList.remove('hidden');
+                    document.getElementById('quick').classList.remove('hidden');
+
                     setTimeout(() => {
                         showDashboard();
                     }, 1000);
