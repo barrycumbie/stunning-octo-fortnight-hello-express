@@ -191,17 +191,6 @@
             }
         });
 
-        // Show user dashboard
-        function showDashboard() {
-            const token = localStorage.getItem('jwtToken');
-            const username = localStorage.getItem('username');
-            
-            document.getElementById('authForms').classList.add('hidden');
-            document.getElementById('userDashboard').classList.remove('hidden');
-            document.getElementById('currentUsername').textContent = username;
-            document.getElementById('tokenDisplay').textContent = token;
-        }
-
         // Logout user
         function logout() {
             localStorage.removeItem('jwtToken');
