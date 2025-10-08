@@ -6,6 +6,4 @@
 - [Mini App Render Link] (https://goat-finder-miniapp.onrender.com)
 
 ### Description
--This SPA lets visitors create, view, sort, update, and delete goats to help owners find suitable mates. 
--Sort by name, breed, age, weight, price, or temperament. 
--Optional image upload is supported.
+This SPA lets visitors create, view, sort, update, and delete goats to help owners find suitable mates. Sort by name, breed, age, weight, price, or temperament. Optional image upload is supported.
