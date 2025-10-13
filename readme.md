@@ -1,6 +1,12 @@
 # CIS 486 🐳 MINI APPs 
 # CIS 486 MINI APP 🎶🎵
 
+
+### Gage Bays — Schedule Manager
+
+Deployed App: https://student-manager-ydpi.onrender.com
+GitHub Repo: https://github.com/gageb3/student-manager
+
 ### Video Game Backlog Mini App
 - Isabella Archer on [GitHub](https://github.com/iarcher444)
 - [DEMO MINI APP](https://dev-lab-quebec-game.onrender.com/)
