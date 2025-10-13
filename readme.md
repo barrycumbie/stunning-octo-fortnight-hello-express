@@ -2,6 +2,13 @@
 # CIS 486 MINI APP 🎶🎵
 
 
+## Task Manager Mini App
+- Matthew Andrews on [GitHub] (https://github.com/mandrews3)
+- [Demo Mini App](https://dev-lab-quebec-task-manager.onrender.com)
+- [REPO](https://github.com/mandrews3/Dev-lab-QUEBEC-task-manager.git)
+- Here is my mini app that allows you to enter task and keep up with each task by date and time. It allow you to delete the task as soon as it is completed, or edit the task at any time. 
+
+
 ### Vinyl Record Collection
 - Justin Alkire [Github](https://github.com/JustinAlkire)
 - [Vinyl Record Collection](miniapp-q1ub.onrender.com)
