@@ -1,12 +1,22 @@
 # CIS 486 Mini APPS 🎶🎵📖🐳
 
 
+### Steam Game Value Tracker
+- [Jason Conkle](https://github.com/Jconkle5)
+
+- [Steam Value Tracker](https://ite-cap-first-real.onrender.com/)
+
+- [Repo](https://github.com/Jconkle5/Mini-App-Repo/)
+
+This app is a clean way to track the value you get out of your steam games. For each game you add into the DB, it tracks the hours played and the price payed. It will take those and calculate a total hours per dollar spent so you know which games give you the best deal.
+
+### Travel app 
 - Will Cisco on [GitHub] (https://github.com/wcisco)
 - [Demo App] (https://animated-octo-garbanzo-hello-express.onrender.com)
 - [Will's Travel Wish List] (https://github.com/wcisco/animated-octo-garbanzo-hello-express)
 - This app allows you to add places that you want to go. You can delete those places after you have gone or don't want to go anymore. You can also update them if you make a mistake. They will be stored in MongoDB. I will add the MONGOURI to the submission comments just incase of any issues. 
 
-
+### Movie thingy 
 - Joshua Bradley on [GitHub](https://github.com/joshuabrad03)
 - [Vist the Movie Watchlist App](https://automatic-fishstick.onrender.com/)
 - [REPO](https://github.com/joshuabrad03/automatic-fishstick)
@@ -83,4 +93,3 @@ Here's my stuff
  - [Demo Music Library Mini App](https://music-library-io5y.onrender.com/)
  - [Music Library Repo](https://github.com/baileestrait/music-library-cis486)
  - This mini app allows you to log all your favorite songs in a music library utilizing CRUD!
-
