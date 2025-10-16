@@ -1,5 +1,11 @@
 # CIS 486 Mini APPS 🎶🎵📖🐳
 
+
+- Joshua Bradley on [GitHub](https://github.com/joshuabrad03)
+- [Vist the Movie Watchlist App](https://automatic-fishstick.onrender.com/)
+- [REPO](https://github.com/joshuabrad03/automatic-fishstick)
+- This Movie Watchlist app shows a complete full-stack data round trip with lasting storage. Users can manage their personal movie watchlist by adding movies they want to watch, marking them as watched, rating them, and adding personal notes. The application showcases all CRUD operations through a clean, mobile-responsive interface.
+
 ### CLass Demo Mini App
 - Spencer Blake on [Github](https://github.com/SblakeUNA)
 - [DEMO MINI APP](https://expert-octo-broccoli-express.onrender.com)
@@ -71,5 +77,4 @@ Here's my stuff
  - [Demo Music Library Mini App](https://music-library-io5y.onrender.com/)
  - [Music Library Repo](https://github.com/baileestrait/music-library-cis486)
  - This mini app allows you to log all your favorite songs in a music library utilizing CRUD!
-
 
