@@ -1,17 +1,22 @@
 # CIS 486 Mini APPS 🎶🎵📖🐳
 
-# Preya
+### Prayanshu
+Live Deployment link "https://mario-restaurant.onrender.com"
+Repository link "https://github.com/Prayanshu1019/Mario-Restaurant.git"
+
+
+### Preya
 - [QUEBEC Tasks — Preya Patel](https://quebec-tasks.onrender.com)  
   Full stack CRUD SPA with Node.js, Express, MongoDB Atlas, and Bootstrap/jQuery.  
   [Source Code](https://github.com/p02003/quebec-tasks)
 
 
-# CIS 486 - MINI APP
+### CIS 486 - MINI APP
 - Olivia Sharpston on [GitHub](https://github.com/Olivia-Sharpston)
 - [Book Logging Demo MINI APP](https://book-logging-app.onrender.com/)
 - [Book Logging Repo](https://github.com/Olivia-Sharpston/book-logging-app)
 
-### This mini app allows you to keep track of your books using CRUD! It can also recommomend you some books!
+- This mini app allows you to keep track of your books using CRUD! It can also recommomend you some books!
 
 ### MUSIC DATABASE WEBSITE
 - Raiden Greene on [Github](https://github.com/raidengreene)
