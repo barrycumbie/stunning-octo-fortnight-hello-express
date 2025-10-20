@@ -1,5 +1,12 @@
 # CIS 486 Mini APPS 🎶🎵📖🐳
 
+## Victor Love
+Here's my stuff
+- Victor Love on [GitHub](https://github.com/VicLove25)
+- [APP](https://dev-lab-quebec-p9mb.onrender.com/)
+- [REPO](https://github.com/VicLove25/dev-lab-quebec)
+- Here's an app that show's off CRUD and JWT, and is good.
+- 
 ### Prayanshu
 Live Deployment link "https://mario-restaurant.onrender.com"
 Repository link "https://github.com/Prayanshu1019/Mario-Restaurant.git"
