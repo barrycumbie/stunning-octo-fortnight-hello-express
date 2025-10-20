@@ -1,4 +1,10 @@
-# CIS 486 Mini APPS 🎶🎵📖🐳
+# CIS 486 Mini APPS 🎶🎵📖🐳🐋
+
+### My Completed MINI APP
+- [Robert Martin](https://github.com/RobCMYK)
+- [Demo of Mini App](https://mini-app-eiw6.onrender.com)
+- [Mini App] (https://github.com/RobCMYK/mini-app)
+- Here is an app that lets you create, read, update, and delete flashcard sets
 
 ### Samuel Senecal's Sleep Log 
 **App Story**: I decided to go back to the very beginning, my first ever web app called **SleepLog**. I took the bones and basic concept of that original project and applied all the steps required in the mini app assignment. 
