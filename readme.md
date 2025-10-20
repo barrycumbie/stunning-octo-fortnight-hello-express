@@ -1,5 +1,12 @@
 # CIS 486 Mini APPS 🎶🎵📖🐳🐋🐻‍❄️
 
+
+### Guitar Inventory Mini-App
+- Matthew Wise on [GitHub](https://github.com/Matthewwisee)
+- [MINI APP](https://didactic-couscous-smkp.onrender.com/guitars)
+- [REPO](https://github.com/Matthewwisee/didactic-couscous)
+- This is a web-based Single Page Application (SPA) that demonstrates a complete full stack data round trip using Node.js, Express.js, MongoDB, and RESTful API. Through this application's interface, users are able to add, edit, and delete guitar records in a MongoDB database.
+
 ### Game Tracker Mini App
 - Jonathan Hall on [Github](https.//github.com/Jonathan-Hall34)
 - [Demo Mini App](https://game-tracker-a8ck.onrender.com)
