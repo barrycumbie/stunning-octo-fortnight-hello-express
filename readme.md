@@ -1,5 +1,11 @@
 # CIS 486 Mini APPS 🎶🎵📖🐳
 
+# Preya
+- [QUEBEC Tasks — Preya Patel](https://quebec-tasks.onrender.com)  
+  Full stack CRUD SPA with Node.js, Express, MongoDB Atlas, and Bootstrap/jQuery.  
+  [Source Code](https://github.com/p02003/quebec-tasks)
+
+
 # CIS 486 - MINI APP
 - Olivia Sharpston on [GitHub](https://github.com/Olivia-Sharpston)
 - [Book Logging Demo MINI APP](https://book-logging-app.onrender.com/)
