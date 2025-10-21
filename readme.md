@@ -1,3 +1,4 @@
+
 # CIS 486 Mini APPS 🎶🎵📖🐳🐋🐻‍❄️
 
 ### Class Demo Mini App
@@ -158,7 +159,7 @@ GitHub Repo: https://github.com/gageb3/student-manager
 - Here's an app that show's off crud and JWT, and is bad.
   
 
-## Student McStudentface
+### Student McStudentface
 Here's my stuff
 - Barry Cumbie on [GitHub](https://github.com/barrycumbie)
 - [DEMO MINI APP](https://stunning-octo-fortnight-hello-express.onrender.com)
@@ -180,7 +181,7 @@ Here's my stuff
 
 **Description** This SPA lets visitors create, view, sort, update, and delete goats to help owners find suitable mates. Sort by name, breed, age, weight, price, or temperament. Optional image upload is supported.
 
-## - Bailee Strait on [GitHub](https://github.com/baileestrait)
+### - Bailee Strait on [GitHub](https://github.com/baileestrait)
  - [Demo Music Library Mini App](https://music-library-io5y.onrender.com/)
  - [Music Library Repo](https://github.com/baileestrait/music-library-cis486)
  - This mini app allows you to log all your favorite songs in a music library utilizing CRUD!
