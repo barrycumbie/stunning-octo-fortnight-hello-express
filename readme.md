@@ -1,5 +1,11 @@
 # CIS 486 Mini APPS 🎶🎵📖🐳🐋🐻‍❄️
 
+### Class Demo Mini App
+- **Laura Lemoine**
+- [Demo Mini App](https://dashboard.render.com/web/srv-d3ao8g56ubrc73e42rn0)
+- [GitHub Repository](https://github.com/llemoine1230/CIS-486-QUEBEC)
+
+
 ### 📘 Student Bookshelf by Paridhi Malhotra
 
 - 🔗 [Live App](https://student-bookshelf-1.onrender.com)
